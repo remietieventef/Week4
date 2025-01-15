@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corporate Game</title>
+    <style>
+        body {
+            background: url('/mnt/data/fond.jpg.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .car {
+            position: absolute;
+            width: 50px;
+        }
+        .leaderboard {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .popup input, .popup button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="leaderboard" class="leaderboard">
+        <h3>Leaderboard</h3>
+        <ul id="leaderboard-list">
+        </ul>
+    </div>
+    <div id="popup" class="popup">
+        <h3>Manage Teams</h3>
+        <div id="teams-container"></div>
+        <button onclick="addTeam()">Add Team</button>
+        <button onclick="closePopup()">Close</button>
+    </div>
+    <script>
+        const teams = [];
+        const totalPoints = 15000;
+        let teamCount = 15;
+
+        function initTeams() {
+            for (let i = 0; i < teamCount; i++) {
+                teams.push({ name: `Team ${i + 1}`, points: 0 });
+            }
+            updateTeams();
+            updateLeaderboard();
+        }
+
+        function updateTeams() {
+            const container = document.getElementById('teams-container');
+            container.innerHTML = '';
+            teams.forEach((team, index) => {
+                container.innerHTML += `
+                    <div>
+                        <input type="text" value="${team.name}" onchange="renameTeam(${index}, this.value)">
+                        <input type="number" value="${team.points}" onchange="updatePoints(${index}, this.value)">
+                    </div>
+                `;
+            });
+        }
+
+        function renameTeam(index, name) {
+            teams[index].name = name;
+            updateLeaderboard();
+        }
+
+        function updatePoints(index, points) {
+            teams[index].points = parseInt(points);
+            moveCar(index);
+            updateLeaderboard();
+        }
+
+        function addTeam() {
+            teams.push({ name: `Team ${teams.length + 1}`, points: 0 });
+            updateTeams();
+        }
+
+        function moveCar(index) {
+            const car = document.getElementById(`car${index}`);
+            const percentage = teams[index].points / (totalPoints / teamCount);
+            const roadLength = 1000; // Assuming the road length in pixels
+            const position = Math.min(roadLength * percentage, roadLength);
+            car.style.transform = `translateX(${position}px)`; // Simplified movement logic
+        }
+
+        function updateLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            const sortedTeams = teams.slice().sort((a, b) => b.points - a.points).slice(0, 5);
+            list.innerHTML = '';
+            sortedTeams.forEach(team => {
+                list.innerHTML += `<li>${team.name}: ${team.points} points</li>`;
+            });
+        }
+
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTeams();
+            for (let i = 0; i < teamCount; i++) {
+                const car = document.createElement('img');
+                car.src = `voiture${i + 1}.png`;
+                car.id = `car${i}`;
+                car.className = 'car';
+                document.body.appendChild(car);
+            }
+        });
+    </script>
+    <button onclick="showPopup()">Manage Teams</button>
+</body>
+</html>
