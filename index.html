@@ -13,6 +13,7 @@
             position: absolute;
             width: 50px;
             transition: transform 1s linear;
+            z-index: 10;
         }
         .leaderboard {
             position: fixed;
@@ -21,6 +22,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             padding: 10px;
             border-radius: 5px;
+            z-index: 20;
         }
         .popup {
             display: none;
@@ -31,6 +33,7 @@
             background-color: white;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 30;
         }
         .popup input, .popup button {
             margin: 5px;
@@ -42,6 +45,7 @@
             width: 100%;
             height: 100%;
             cursor: crosshair;
+            z-index: 5;
         }
     </style>
 </head>
@@ -84,6 +88,11 @@
 
             console.log(`Point added: [${x}, ${y}]`);
         });
+
+        function saveAndHidePoints() {
+            console.log('Saved points:', pathPoints);
+            canvas.style.display = 'none';
+        }
 
         function initTeams() {
             for (let i = 0; i < teamCount; i++) {
@@ -161,5 +170,6 @@
         });
     </script>
     <button onclick="showPopup()">Manage Teams</button>
+    <button onclick="saveAndHidePoints()">Save Points</button>
 </body>
 </html>
