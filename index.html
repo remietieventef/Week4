@@ -73,8 +73,12 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
+        let isPlacingPoints = true;
+
         // Add event listener for clicks to define points
         canvas.addEventListener('click', (event) => {
+            if (!isPlacingPoints) return;
+
             const rect = canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
@@ -89,10 +93,14 @@
             console.log(`Point added: [${x}, ${y}]`);
         });
 
-        function saveAndHidePoints() {
-            console.log('Saved points:', pathPoints);
-            canvas.style.display = 'none';
-        }
+        // Save points and hide canvas when Enter key is pressed
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                isPlacingPoints = false;
+                canvas.style.display = 'none';
+                console.log('Saved points:', pathPoints);
+            }
+        });
 
         function initTeams() {
             for (let i = 0; i < teamCount; i++) {
@@ -170,6 +178,5 @@
         });
     </script>
     <button onclick="showPopup()">Manage Teams</button>
-    <button onclick="saveAndHidePoints()">Save Points</button>
 </body>
 </html>
