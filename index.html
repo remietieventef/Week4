@@ -12,7 +12,7 @@
         .car {
             position: absolute;
             width: 50px;
-            transition: transform 1s linear;
+            transition: transform 0.5s linear;
             z-index: 10;
         }
         .leaderboard {
@@ -38,14 +38,14 @@
         .popup input, .popup button {
             margin: 5px;
         }
-        #clickable-overlay {
+        #drawing-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            cursor: crosshair;
             z-index: 5;
+            cursor: crosshair;
         }
     </style>
 </head>
@@ -61,45 +61,42 @@
         <button onclick="addTeam()">Add Team</button>
         <button onclick="closePopup()">Close</button>
     </div>
-    <canvas id="clickable-overlay"></canvas>
+    <canvas id="drawing-overlay"></canvas>
     <script>
         const teams = [];
         const totalPoints = 15000;
         let teamCount = 15;
-        const pathPoints = [];
+        let pathPoints = [];
 
-        const canvas = document.getElementById('clickable-overlay');
+        const canvas = document.getElementById('drawing-overlay');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        let isPlacingPoints = true;
+        let isDrawing = true;
 
-        // Add event listener for clicks to define points
-        canvas.addEventListener('click', (event) => {
-            if (!isPlacingPoints) return;
-
-            const rect = canvas.getBoundingClientRect();
-            const x = event.clientX - rect.left;
-            const y = event.clientY - rect.top;
-            pathPoints.push([x, y]);
-
-            // Draw the point on the canvas
-            ctx.fillStyle = 'red';
+        // Draw path interactively
+        canvas.addEventListener('mousedown', () => {
+            isDrawing = true;
             ctx.beginPath();
-            ctx.arc(x, y, 5, 0, 2 * Math.PI);
-            ctx.fill();
-
-            console.log(`Point added: [${x}, ${y}]`);
         });
 
-        // Save points and hide canvas when Enter key is pressed
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                isPlacingPoints = false;
-                canvas.style.display = 'none';
-                console.log('Saved points:', pathPoints);
+        canvas.addEventListener('mousemove', (event) => {
+            if (isDrawing) {
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+                ctx.lineTo(x, y);
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 3;
+                ctx.stroke();
+                pathPoints.push([x, y]);
             }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+            console.log('Path saved:', pathPoints);
         });
 
         function initTeams() {
