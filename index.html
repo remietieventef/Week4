@@ -38,15 +38,6 @@
         .popup input, .popup button {
             margin: 5px;
         }
-        #drawing-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 5;
-            cursor: crosshair;
-        }
     </style>
 </head>
 <body>
@@ -61,51 +52,13 @@
         <button onclick="addTeam()">Add Team</button>
         <button onclick="closePopup()">Close</button>
     </div>
-    <canvas id="drawing-overlay"></canvas>
     <script>
         const teams = [];
         const totalPoints = 15000;
         let teamCount = 15;
-        let pathPoints = [];
-
-        const canvas = document.getElementById('drawing-overlay');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        let isDrawing = true;
-
-        // Draw path interactively
-        canvas.addEventListener('mousedown', () => {
-            isDrawing = true;
-            ctx.beginPath();
-        });
-
-        canvas.addEventListener('mousemove', (event) => {
-            if (isDrawing) {
-                const rect = canvas.getBoundingClientRect();
-                const x = event.clientX - rect.left;
-                const y = event.clientY - rect.top;
-                ctx.lineTo(x, y);
-                ctx.strokeStyle = 'red';
-                ctx.lineWidth = 3;
-                ctx.stroke();
-                pathPoints.push([x, y]);
-            }
-        });
-
-        canvas.addEventListener('mouseup', () => {
-            isDrawing = false;
-        });
-
-        // Save path and disable drawing when Enter key is pressed
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                isDrawing = false;
-                canvas.style.display = 'none';
-                console.log('Path saved:', pathPoints);
-            }
-        });
+        const roadStartX = 100; // Starting X coordinate of the road
+        const roadStartY = 500; // Starting Y coordinate of the road
+        const roadWidth = 800; // Length of the road
 
         function initTeams() {
             for (let i = 0; i < teamCount; i++) {
@@ -113,6 +66,7 @@
             }
             updateTeams();
             updateLeaderboard();
+            createCars();
         }
 
         function updateTeams() {
@@ -144,14 +98,23 @@
             updateTeams();
         }
 
+        function createCars() {
+            for (let i = 0; i < teamCount; i++) {
+                const car = document.createElement('img');
+                car.src = `voiture${i + 1}.png`;
+                car.id = `car${i}`;
+                car.className = 'car';
+                car.style.left = `${roadStartX}px`;
+                car.style.top = `${roadStartY - (i * 60)}px`; // Space cars vertically
+                document.body.appendChild(car);
+            }
+        }
+
         function moveCar(index) {
             const car = document.getElementById(`car${index}`);
-            const percentage = teams[index].points / (totalPoints / teamCount);
-            const pathIndex = Math.min(Math.floor(percentage * pathPoints.length), pathPoints.length - 1);
-            const position = pathPoints[pathIndex];
-            if (position) {
-                car.style.transform = `translate(${position[0]}px, ${position[1]}px)`;
-            }
+            const percentage = teams[index].points / totalPoints;
+            const newX = roadStartX + percentage * roadWidth;
+            car.style.left = `${newX}px`;
         }
 
         function updateLeaderboard() {
@@ -173,13 +136,6 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initTeams();
-            for (let i = 0; i < teamCount; i++) {
-                const car = document.createElement('img');
-                car.src = `voiture${i + 1}.png`;
-                car.id = `car${i}`;
-                car.className = 'car';
-                document.body.appendChild(car);
-            }
         });
     </script>
     <button onclick="showPopup()">Manage Teams</button>
