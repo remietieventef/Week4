@@ -6,7 +6,7 @@
     <title>Corporate Game</title>
     <style>
         body {
-            background: url('fond.jpg (2).png') no-repeat center center fixed;
+            background: url('fond.jpg (3).png') no-repeat center center fixed;
             background-size: cover;
         }
         .car {
@@ -53,17 +53,23 @@
         <button onclick="closePopup()">Close</button>
     </div>
     <script>
-        const teams = [];
-        const totalPoints = 15000;
-        let teamCount = 15;
+        const teams = [
+            { name: "FRP 1", points: 0 },
+            { name: "FRP 2", points: 0 },
+            { name: "FRP 3 + ANNECY", points: 0 },
+            { name: "FRA", points: 0 },
+            { name: "FRL", points: 0 },
+            { name: "FRS + FRH", points: 0 },
+            { name: "FRR + FRM", points: 0 },
+            { name: "FRB + FRT", points: 0 },
+            { name: "FRN/FRI + FRC + FRD", points: 0 }
+        ];
+        const pointsToFinish = 1667;
         const roadStartX = 100; // Starting X coordinate of the road
         const roadStartY = 500; // Starting Y coordinate of the road
         const roadWidth = 800; // Length of the road
 
         function initTeams() {
-            for (let i = 0; i < teamCount; i++) {
-                teams.push({ name: `Team ${i + 1}`, points: 0 });
-            }
             updateTeams();
             updateLeaderboard();
             createCars();
@@ -94,26 +100,26 @@
         }
 
         function addTeam() {
-            teams.push({ name: `Team ${teams.length + 1}`, points: 0 });
+            teams.push({ name: `New Team`, points: 0 });
             updateTeams();
         }
 
         function createCars() {
-            for (let i = 0; i < teamCount; i++) {
+            for (let i = 0; i < teams.length; i++) {
                 const car = document.createElement('img');
                 car.src = `voiture${i + 1}.png`;
                 car.id = `car${i}`;
                 car.className = 'car';
                 car.style.left = `${roadStartX}px`;
-                car.style.top = `${roadStartY - (i * 60)}px`; // Space cars vertically
+                car.style.top = `${roadStartY}px`; // All cars start on the same vertical position
                 document.body.appendChild(car);
             }
         }
 
         function moveCar(index) {
             const car = document.getElementById(`car${index}`);
-            const percentage = teams[index].points / totalPoints;
-            const newX = roadStartX + percentage * roadWidth;
+            const percentage = teams[index].points / pointsToFinish;
+            const newX = Math.min(roadStartX + percentage * roadWidth, roadStartX + roadWidth);
             car.style.left = `${newX}px`;
         }
 
