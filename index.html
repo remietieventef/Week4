@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu MW04</title>
+    <title>MW4 Game</title>
     <style>
         body {
             background: url('fond.jpg (3).png') no-repeat center center fixed;
@@ -11,7 +11,7 @@
         }
         .car {
             position: absolute;
-            width: 200px;
+            width: 200px; /* Increased size to 4x */
             transition: transform 0.5s linear;
             z-index: 10;
         }
@@ -57,7 +57,7 @@
     </style>
 </head>
 <body>
-    <a href="Card.html" target="_blank" class="nav-button">Go to Card Draw</a>
+    <a href="card.html" target="_blank" class="nav-button">Go to Card Draw</a>
     <div id="leaderboard" class="leaderboard">
         <h3>Leaderboard</h3>
         <ul id="leaderboard-list">
@@ -83,7 +83,7 @@
         ];
         const pointsToFinish = 1667;
         const roadStartX = 100; // Starting X coordinate of the road
-        const roadStartY = 500; // Starting Y coordinate of the road
+        const roadStartY = window.innerHeight / 2 - 100; // Centered vertically
         const roadWidth = 800; // Length of the road
 
         function initTeams() {
@@ -128,7 +128,7 @@
                 car.id = `car${i}`;
                 car.className = 'car';
                 car.style.left = `${roadStartX}px`;
-                car.style.top = `${roadStartY}px`; // All cars start on the same vertical position
+                car.style.top = `${roadStartY}px`; // All cars start at centered vertical position
                 document.body.appendChild(car);
             }
         }
