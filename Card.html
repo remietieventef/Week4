@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Draw</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            width: 150px;
+            height: 200px;
+            margin: 10px;
+            position: relative;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .filter {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #f4d03f, #d4af37);
+            opacity: 0.95;
+            transition: opacity 0.3s;
+        }
+        .card.revealed .filter {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const cardCount = 11;
+
+        // Create and display cards
+        for (let i = 1; i <= cardCount; i++) {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const img = document.createElement('img');
+            img.src = `carte${i}.png`;
+            img.alt = `Carte ${i}`;
+
+            const filter = document.createElement('div');
+            filter.className = 'filter';
+
+            card.appendChild(img);
+            card.appendChild(filter);
+
+            card.addEventListener('click', () => {
+                card.classList.add('revealed');
+            });
+
+            document.body.appendChild(card);
+        }
+    </script>
+</body>
+</html>
