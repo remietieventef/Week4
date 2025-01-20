@@ -41,20 +41,57 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(145deg, #f4d03f, #d4af37);
-            opacity: 0.95;
-            transition: opacity 0.3s;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: silver;
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .filter::after {
+            content: "?";
         }
         .card.revealed .filter {
             opacity: 0;
         }
+        .back-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
+    <a href="index.html" class="back-button">Return to Game Board</a>
     <script>
         const cardCount = 11;
 
-        // Create and display cards
-        for (let i = 1; i <= cardCount; i++) {
+        // Shuffle an array
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Create and display cards in random order
+        const cardIndices = Array.from({ length: cardCount }, (_, i) => i + 1);
+        shuffle(cardIndices);
+
+        cardIndices.forEach(i => {
             const card = document.createElement('div');
             card.className = 'card';
 
@@ -73,7 +110,8 @@
             });
 
             document.body.appendChild(card);
-        }
+        });
     </script>
 </body>
 </html>
+
