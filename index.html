@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartoon Week 4</title>
+    <title>Corporate Game</title>
     <style>
         body {
-            background: url('fond.jpg (3).png') no-repeat center center fixed;
+            background: url('fond.jpg.png') no-repeat center center fixed;
             background-size: cover;
         }
         .car {
@@ -38,9 +38,26 @@
         .popup input, .popup button {
             margin: 5px;
         }
+        .nav-button {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .nav-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
+    <a href="card.html" class="nav-button">Go to Card Draw</a>
     <div id="leaderboard" class="leaderboard">
         <h3>Leaderboard</h3>
         <ul id="leaderboard-list">
